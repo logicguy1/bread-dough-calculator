@@ -295,13 +295,22 @@ const BreadDoughConfigurator = () => {
       <Box sx={{ mb: 3 }}>
         <Typography variant="subtitle1" color="primary.main" gutterBottom>
           Flour ({flourTotal.toFixed(1)}%)
+          {activeStep === 2 && calculatedResults.flour.length > 0 && (
+            <Typography component="span" variant="body2" sx={{ ml: 1, fontWeight: 'normal' }}>
+              - {calculatedResults.flour.reduce((sum, ing) => sum + ing.grams, 0).toFixed(1)}g
+            </Typography>
+          )}
         </Typography>
         <List dense sx={{ pl: 1 }}>
-          {flourIngredients.map((ingredient) => (
+          {(activeStep === 2 && calculatedResults.flour.length > 0 ? calculatedResults.flour : flourIngredients).map((ingredient) => (
             <ListItem key={ingredient.id} sx={{ py: 0.5, px: 1 }}>
               <ListItemText
                 primary={ingredient.name}
-                secondary={`${ingredient.percentage}%`}
+                secondary={
+                  activeStep === 2 && ingredient.grams !== undefined
+                    ? `${ingredient.percentage}% - ${ingredient.grams}g`
+                    : `${ingredient.percentage}%`
+                }
                 primaryTypographyProps={{ variant: 'body2' }}
                 secondaryTypographyProps={{ variant: 'caption' }}
               />
@@ -316,13 +325,22 @@ const BreadDoughConfigurator = () => {
       <Box sx={{ mb: 3 }}>
         <Typography variant="subtitle1" color="info.main" gutterBottom>
           Hydration ({hydrationTotal.toFixed(1)}%)
+          {activeStep === 2 && calculatedResults.hydration.length > 0 && (
+            <Typography component="span" variant="body2" sx={{ ml: 1, fontWeight: 'normal' }}>
+              - {calculatedResults.hydration.reduce((sum, ing) => sum + ing.grams, 0).toFixed(1)}g
+            </Typography>
+          )}
         </Typography>
         <List dense sx={{ pl: 1 }}>
-          {hydrationIngredients.map((ingredient) => (
+          {(activeStep === 2 && calculatedResults.hydration.length > 0 ? calculatedResults.hydration : hydrationIngredients).map((ingredient) => (
             <ListItem key={ingredient.id} sx={{ py: 0.5, px: 1 }}>
               <ListItemText
                 primary={ingredient.name}
-                secondary={`${ingredient.percentage}%`}
+                secondary={
+                  activeStep === 2 && ingredient.grams !== undefined
+                    ? `${ingredient.percentage}% - ${ingredient.grams}g`
+                    : `${ingredient.percentage}%`
+                }
                 primaryTypographyProps={{ variant: 'body2' }}
                 secondaryTypographyProps={{ variant: 'caption' }}
               />
@@ -337,13 +355,22 @@ const BreadDoughConfigurator = () => {
       <Box sx={{ mb: 3 }}>
         <Typography variant="subtitle1" color="secondary.main" gutterBottom>
           Extras ({extraTotal.toFixed(1)}%)
+          {activeStep === 2 && calculatedResults.extra.length > 0 && (
+            <Typography component="span" variant="body2" sx={{ ml: 1, fontWeight: 'normal' }}>
+              - {calculatedResults.extra.reduce((sum, ing) => sum + ing.grams, 0).toFixed(1)}g
+            </Typography>
+          )}
         </Typography>
         <List dense sx={{ pl: 1 }}>
-          {extraIngredients.map((ingredient) => (
+          {(activeStep === 2 && calculatedResults.extra.length > 0 ? calculatedResults.extra : extraIngredients).map((ingredient) => (
             <ListItem key={ingredient.id} sx={{ py: 0.5, px: 1 }}>
               <ListItemText
                 primary={ingredient.name}
-                secondary={`${ingredient.percentage}%`}
+                secondary={
+                  activeStep === 2 && ingredient.grams !== undefined
+                    ? `${ingredient.percentage}% - ${ingredient.grams}g`
+                    : `${ingredient.percentage}%`
+                }
                 primaryTypographyProps={{ variant: 'body2' }}
                 secondaryTypographyProps={{ variant: 'caption' }}
               />
@@ -358,6 +385,12 @@ const BreadDoughConfigurator = () => {
       <Box sx={{ p: 2, bgcolor: 'background.paper', borderRadius: 1, border: 1, borderColor: 'divider' }}>
         <Typography variant="h6" align="center" color="text.primary">
           Total: {totalPercentage.toFixed(1)}%
+          {activeStep === 2 && calculatedResults.flour.length > 0 && (
+            <Typography variant="body2" component="div" sx={{ mt: 1, fontWeight: 'bold' }}>
+              {([...calculatedResults.flour, ...calculatedResults.hydration, ...calculatedResults.extra]
+                .reduce((sum, ing) => sum + ing.grams, 0)).toFixed(1)}g
+            </Typography>
+          )}
         </Typography>
       </Box>
 
@@ -784,19 +817,6 @@ const BreadDoughConfigurator = () => {
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-      {/* Sidebar */}
-      {!isMobile && (
-        <Box sx={{ 
-          width: 280, 
-          flexShrink: 0, 
-          bgcolor: 'background.default',
-          borderRight: 1,
-          borderColor: 'divider'
-        }}>
-          {renderSidebar()}
-        </Box>
-      )}
-
       {/* Main Content */}
       <Box sx={{ 
         flexGrow: 1, 
@@ -843,6 +863,19 @@ const BreadDoughConfigurator = () => {
           </Card>
         </Box>
       </Box>
+
+      {/* Sidebar */}
+      {!isMobile && (
+        <Box sx={{ 
+          width: 280, 
+          flexShrink: 0, 
+          bgcolor: 'background.default',
+          borderRight: 1,
+          borderColor: 'divider'
+        }}>
+          {renderSidebar()}
+        </Box>
+      )}
 
       {/* Mobile Drawer for Sidebar */}
       {isMobile && (
