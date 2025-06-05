@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "./static/css/main.3299dfb2.css",
+    "main.js": "./static/js/main.801978e5.js",
+    "static/media/SourceSans3-VariableFont_wght.ttf": "./static/media/SourceSans3-VariableFont_wght.356a676840d27fc39749.ttf",
+    "static/media/SourceSans3-Italic-VariableFont_wght.ttf": "./static/media/SourceSans3-Italic-VariableFont_wght.ab8b5d415c6cb03e413f.ttf",
+    "index.html": "./index.html",
+    "main.3299dfb2.css.map": "./static/css/main.3299dfb2.css.map",
+    "main.801978e5.js.map": "./static/js/main.801978e5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3299dfb2.css",
+    "static/js/main.801978e5.js"
+  ]
+}
