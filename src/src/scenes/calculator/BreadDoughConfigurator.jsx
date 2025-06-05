@@ -30,6 +30,12 @@ import {
   AccordionSummary,
   AccordionDetails,
   ListSubheader,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -38,9 +44,12 @@ import {
   RestartAlt as RestartIcon,
   BakeryDining as BakeryDiningIcon,
   ExpandMore as ExpandMoreIcon,
+  Receipt as ReceiptIcon,
 } from '@mui/icons-material';
 
 const BreadDoughConfigurator = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [activeStep, setActiveStep] = useState(0);
   
   // Separate ingredient categories
@@ -272,6 +281,99 @@ const BreadDoughConfigurator = () => {
     setCalculatedResults({ flour: [], hydration: [], extra: [] });
     setNewIngredientNames({ flour: '', hydration: '', extra: '' });
   };
+
+  const renderSidebar = () => (
+    <Box sx={{ width: 280, p: 2, height: '100vh', overflow: 'auto' }}>
+      <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
+        <ReceiptIcon color="primary" />
+        <Typography variant="h6" color="primary">
+          Recipe Overview
+        </Typography>
+      </Box>
+
+      {/* Flour Section */}
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="subtitle1" color="primary.main" gutterBottom>
+          Flour ({flourTotal.toFixed(1)}%)
+        </Typography>
+        <List dense sx={{ pl: 1 }}>
+          {flourIngredients.map((ingredient) => (
+            <ListItem key={ingredient.id} sx={{ py: 0.5, px: 1 }}>
+              <ListItemText
+                primary={ingredient.name}
+                secondary={`${ingredient.percentage}%`}
+                primaryTypographyProps={{ variant: 'body2' }}
+                secondaryTypographyProps={{ variant: 'caption' }}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+
+      <Divider sx={{ my: 2 }} />
+
+      {/* Hydration Section */}
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="subtitle1" color="info.main" gutterBottom>
+          Hydration ({hydrationTotal.toFixed(1)}%)
+        </Typography>
+        <List dense sx={{ pl: 1 }}>
+          {hydrationIngredients.map((ingredient) => (
+            <ListItem key={ingredient.id} sx={{ py: 0.5, px: 1 }}>
+              <ListItemText
+                primary={ingredient.name}
+                secondary={`${ingredient.percentage}%`}
+                primaryTypographyProps={{ variant: 'body2' }}
+                secondaryTypographyProps={{ variant: 'caption' }}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+
+      <Divider sx={{ my: 2 }} />
+
+      {/* Extras Section */}
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="subtitle1" color="secondary.main" gutterBottom>
+          Extras ({extraTotal.toFixed(1)}%)
+        </Typography>
+        <List dense sx={{ pl: 1 }}>
+          {extraIngredients.map((ingredient) => (
+            <ListItem key={ingredient.id} sx={{ py: 0.5, px: 1 }}>
+              <ListItemText
+                primary={ingredient.name}
+                secondary={`${ingredient.percentage}%`}
+                primaryTypographyProps={{ variant: 'body2' }}
+                secondaryTypographyProps={{ variant: 'caption' }}
+              />
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+
+      <Divider sx={{ my: 2 }} />
+
+      {/* Total */}
+      <Box sx={{ p: 2, bgcolor: 'background.paper', borderRadius: 1, border: 1, borderColor: 'divider' }}>
+        <Typography variant="h6" align="center" color="text.primary">
+          Total: {totalPercentage.toFixed(1)}%
+        </Typography>
+      </Box>
+
+      {/* Calculation Info */}
+      {activeStep >= 1 && weightValue && (
+        <Box sx={{ mt: 3, p: 2, bgcolor: 'primary.light', borderRadius: 1 }}>
+          <Typography variant="caption" color="primary.contrastText" display="block">
+            {weightType === 'primary' ? 'Primary Method' : 'Total Weight Method'}
+          </Typography>
+          <Typography variant="body2" color="primary.contrastText">
+            {weightType === 'primary' && primaryIngredient ? `${primaryIngredient}: ${weightValue}g` : `Total: ${weightValue}g`}
+          </Typography>
+        </Box>
+      )}
+    </Box>
+  );
 
   const renderIngredientSection = (title, ingredients, category, total, color) => (
     <Box sx={{ mb: 3 }}>
@@ -681,44 +783,83 @@ const BreadDoughConfigurator = () => {
   };
 
   return (
-    <Box sx={{ maxWidth: 900, mx: 'auto', p: 3 }}>
-      <Card elevation={3}>
-        <CardContent sx={{ p: 4 }}>
-          <Typography variant="h4" gutterBottom align="center" color="primary" sx={{ mb: 4 }}>
-            🥖 Bread Dough Calculator
-          </Typography>
-          
-          <Stepper activeStep={activeStep} sx={{ mb: 5 }}>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
+      {/* Sidebar */}
+      {!isMobile && (
+        <Box sx={{ 
+          width: 280, 
+          flexShrink: 0, 
+          bgcolor: 'background.default',
+          borderRight: 1,
+          borderColor: 'divider'
+        }}>
+          {renderSidebar()}
+        </Box>
+      )}
 
-          {renderStepContent(activeStep)}
+      {/* Main Content */}
+      <Box sx={{ 
+        flexGrow: 1, 
+        p: 3,
+        ...(isMobile ? {} : { ml: 0 })
+      }}>
+        <Box sx={{ maxWidth: 900, mx: 'auto' }}>
+          <Card elevation={3}>
+            <CardContent sx={{ p: 4 }}>
+              <Typography variant="h4" gutterBottom align="center" color="primary" sx={{ mb: 4 }}>
+                🥖 Bread Dough Calculator
+              </Typography>
+              
+              <Stepper activeStep={activeStep} sx={{ mb: 5 }}>
+                {steps.map((label) => (
+                  <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
 
-          {activeStep < 2 && (
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 5 }}>
-              <Button
-                onClick={handleBack}
-                disabled={activeStep === 0}
-                sx={{ px: 3, py: 1.5 }}
-              >
-                Back
-              </Button>
-              <Button
-                variant="contained"
-                onClick={handleNext}
-                disabled={activeStep === 0 && totalPercentage === 0}
-                sx={{ px: 3, py: 1.5 }}
-              >
-                Next
-              </Button>
-            </Box>
-          )}
-        </CardContent>
-      </Card>
+              {renderStepContent(activeStep)}
+
+              {activeStep < 2 && (
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 5 }}>
+                  <Button
+                    onClick={handleBack}
+                    disabled={activeStep === 0}
+                    sx={{ px: 3, py: 1.5 }}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={handleNext}
+                    disabled={activeStep === 0 && totalPercentage === 0}
+                    sx={{ px: 3, py: 1.5 }}
+                  >
+                    Next
+                  </Button>
+                </Box>
+              )}
+            </CardContent>
+          </Card>
+        </Box>
+      </Box>
+
+      {/* Mobile Drawer for Sidebar */}
+      {isMobile && (
+        <Drawer
+          variant="temporary"
+          anchor="right"
+          open={false}
+          sx={{
+            '& .MuiDrawer-paper': {
+              width: 280,
+              boxSizing: 'border-box',
+            },
+          }}
+        >
+          {renderSidebar()}
+        </Drawer>
+      )}
     </Box>
   );
 };
