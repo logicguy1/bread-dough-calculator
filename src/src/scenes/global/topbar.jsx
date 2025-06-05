@@ -74,7 +74,7 @@ const ResponsiveAppBar = ({ drawerOpen, setDrawerOpen }) => {
           pr={2}
         >
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              {headSettings.data?.title || "Dmc4cee Patient Interface"}
+              {headSettings.data?.title || "Bread bread bread"}
             </Typography>
 
           {/* RIGHT SIDE ICONS */}
