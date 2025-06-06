@@ -15,20 +15,15 @@
 		"@mui/x-charts": "^6.19.5",
 		"@mui/x-data-grid": "^6.15.0",
 		"@mui/x-date-pickers": "^6.19.5",
-		"@nivo/bar": "^0.83.0",
-		"@syncfusion/ej2-react-gantt": "^23.1.36",
 		"axios": "^1.7.9",
 		"flume": "^1.0.4",
-		"gantt-schedule-timeline-calendar": "^3.35.2",
 		"papaparse": "^5.4.1",
-		"qrcode.react": "^4.2.0",
 		"react": "^18.2.0",
 		"react-barcode": "^1.4.6",
 		"react-dom": "^18.2.0",
 		"react-draggable": "^4.4.6",
 		"react-pro-sidebar": "^0.7.1",
 		"react-router-dom": "^6.16.0",
-		"use-react-screenshot": "^4.0.0"
 	},
 	"main": "src/electron-starter.js",
 	"scripts": {
@@ -49,5 +44,5 @@
 			"last 1 safari version"
 		]
 	},
-	"homepage": "./bread-dough-calculator/src/build/"
+	"homepage": "https://logicguy1.github.io/bread-dough-calculator/"
 }
